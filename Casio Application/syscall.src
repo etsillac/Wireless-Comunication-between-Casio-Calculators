@@ -1,0 +1,64 @@
+	.SECTION P,CODE,ALIGN=4
+
+	.MACRO SYSCALL FUNO, SYSCALLNAME, TAIL=nop
+	.export \SYSCALLNAME'
+\SYSCALLNAME'
+	mov.l #h'\FUNO, r0
+	mov.l #H'80010070, r2
+	jmp @r2
+	\TAIL'
+	.ENDM
+
+	SYSCALL 049A,   _StartAnyApp
+	SYSCALL 0910,   _KBD_PutKey
+	SYSCALL 0005,	_Register_Addin
+	SYSCALL 0135,	_VRam_Base
+
+	SYSCALL 0376,	_MCS_SearchDirectoryItem
+	SYSCALL 082A,	_MCS_PutInternalItem
+	SYSCALL 0835,	_MCS_DeleteInternalItem
+
+	SYSCALL 0138,	_Cursor_SetPosition
+	SYSCALL 0139,	_Cursor_SetFlashStyle
+	SYSCALL 013A,	_Cursor_SetFlashMode
+	SYSCALL 013B,	_Cursor_GetSettings
+	SYSCALL 0812,	_Cursor_SetFlashOff
+
+	SYSCALL 0985,	_App_CONICS
+	SYSCALL 0998,	_App_DYNA
+	SYSCALL 09DF,	_App_EACT
+	SYSCALL 09E2,	_App_EQUA
+	SYSCALL 09F5,	_App_PRGM
+	SYSCALL 0A00,	_App_FINANCE
+	SYSCALL 0A48,	_App_GRAPH
+	SYSCALL 0A4A,	_App_LINK
+	SYSCALL 0A6B,	_App_MEMORY
+	SYSCALL 0A75,	_App_RECUR
+	SYSCALL 0AAE,	_App_RUNMAT
+	SYSCALL 0AC6,	_App_STAT
+	SYSCALL 0AC8,	_App_SYSTEM
+	
+	SYSCALL 040C,	_Serial_ReadByte
+	SYSCALL 040D,	_Serial_ReadBytes
+	SYSCALL 040E,	_Serial_WriteByte
+	SYSCALL 040F,	_Serial_WriteBytes
+	SYSCALL 0410,	_Serial_WriteByteFIFO
+	SYSCALL 0411,	_Serial_GetRxBufferSize
+	SYSCALL 0412,	_Serial_GetTxBufferFreeCapacity
+	SYSCALL 0413,	_Serial_ClearReceiveBuffer
+	SYSCALL 0414,	_Serial_ClearTransmitBuffer
+	SYSCALL 0418,	_Serial_Open
+	SYSCALL 0419,	_Serial_Close
+	SYSCALL 0422,	_Serial_Peek
+	SYSCALL 0425,	_Serial_IsOpen
+	
+	SYSCALL 04DC,	_Setup_GetEntry
+	SYSCALL 04DD,	_Setup_SetEntry
+	SYSCALL 04DE,	_Setup_GetEntryPtr
+	
+	SYSCALL 04DF,	_Alpha_GetData
+	SYSCALL 04E0,	_Alpha_SetData
+	SYSCALL 04E1,	_Alpha_ClearAll
+
+	SYSCALL 024A,	_Keyboard_GetPressedKey
+	.end
