@@ -6,6 +6,7 @@
 
 #define MAX_MESSAGE_LENGTH 18
 #define MAX_GROUP_USERS 8
+#define MESSAGE_EDIT_LENGTH 17
 #define MESSAGES_PER_PAGE 6
 
 #define DrawButton(column, inversed) drawPatern(2+21*column, 57, 19, 7, inversed ? filledActionButtonBg : actionButtonBg, 0)
@@ -66,6 +67,42 @@ const unsigned char uppercaseToLowercaseIcon[] = {
     1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1,
     1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1,
     1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1
+};
+const unsigned char defaultCursorIcon[] = {
+    1, 1,
+    1, 1,
+    1, 1,
+    1, 1,
+    1, 1,
+    1, 1,
+    1, 1
+};
+const unsigned char shiftCursorIcon[] = {
+    0, 0, 1, 1, 0,
+    0, 1, 0, 0, 0,
+    0, 0, 1, 0, 0,
+    0, 0, 0, 1, 0,
+    0, 1, 1, 0, 0,
+    1, 0, 0, 0, 1,
+    1, 1, 0, 1, 1
+};
+const unsigned char uppercaseAlphaCursorIcon[] = {
+    0, 0, 1, 0, 0,
+    0, 1, 0, 1, 0,
+    0, 1, 1, 1, 0,
+    0, 1, 0, 1, 0,
+    0, 1, 0, 1, 0,
+    1, 0, 0, 0, 1,
+    1, 1, 0, 1, 1
+};
+const unsigned char lowercaseAlphaCursorIcon[] = {
+    0, 0, 1, 0, 0,
+    0, 0, 0, 1, 0,
+    0, 0, 1, 1, 0,
+    0, 1, 0, 1, 0,
+    0, 0, 1, 1, 0,
+    1, 0, 0, 0, 1,
+    1, 1, 0, 1, 1
 };
 
 /* itoa:  convert n to characters in s */
@@ -186,14 +223,18 @@ const char* KeyCodeToChar(unsigned int keyCode, int keyState, int uppercase) {
     return "";
 }
 
-void drawTitleBar(const char* menuTitle, int smallBar) {
-    int x, xStart, y;
-
-    for (x = 0; x < 128; x++) {
-        for (y = 0; smallBar ? (y < 8) : (y < 11); y++) {
-            Bdisp_SetPoint_VRAM(x, y, 1);
+void drawBox(int x1, int y1, int x2, int y2, int color) {
+    int x, y;
+    for (x = x1; x <= x2; x++) {
+        for (y = y1; y <= y2; y++) {
+            Bdisp_SetPoint_VRAM(x, y, color);
         }
     }
+}
+void drawTitleBar(const char* menuTitle, int smallBar) {
+    int xStart;
+
+    drawBox(0, 0, 127, smallBar ? 7 : 10, 1);
 
     xStart = 63 - strlen(menuTitle) * 3;
     PrintXY(xStart, smallBar ? 0 : 2, menuTitle, 1);
@@ -211,13 +252,17 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
     unsigned int key;
     int i;
     
+    int cursor = 0;
+    int displayCursor = 0;
+    int cursorStart = 0;
+    
     int editMode = 1;
-
     int keyState = 0;           // 0: default; 1: temp shift; 2: temp alpha; 3: perm alpha
     int uppercase = 1;
 
     char* buffer;
-    char messageWriting[MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1];
+    char messageWriting[MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1] = "Hello world, i'm Etsillac Gabriel";
+    char currentEditMessage[MESSAGE_EDIT_LENGTH + 2];
 
     Message currentDisplayedMessages[MESSAGES_PER_PAGE];
     char userNames[MAX_GROUP_USERS][3] = { "U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8" };
@@ -239,7 +284,16 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
         }
 
         if (editMode) {
-            PrintXY(0, 57, "Effi|", 0);
+            strncpy(currentEditMessage, messageWriting + cursorStart, MESSAGE_EDIT_LENGTH+1);
+            currentEditMessage[MESSAGE_EDIT_LENGTH+1] = 0;      // add a final null terminator
+
+            PrintXY(0, 57, currentEditMessage, 0);
+            if (keyState == 0) { drawPatern(0 + displayCursor * 6, 57, 2, 7, defaultCursorIcon, 0); }
+            else if (keyState == 1) { drawPatern(1 + displayCursor * 6, 57, 5, 7, shiftCursorIcon, 0); }
+            else if (uppercase) { drawPatern(1 + displayCursor * 6, 57, 5, 7, uppercaseAlphaCursorIcon, 0); }
+            else { drawPatern(1 + displayCursor * 6, 57, 5, 7, lowercaseAlphaCursorIcon, 0); }
+
+            drawBox(106, 56, 127, 63, 0);
             DrawButton(5, 0);
             drawPatern(113, 59, 7, 5, proceedIcon, 0);
         } else {
@@ -262,6 +316,14 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
             else if (key == KEY_CTRL_EXIT) {
                 if (editMode) {  }                              // quit group
                 else { editMode = 1; }
+            }
+            else if (key == KEY_CTRL_LEFT) {
+                if ((displayCursor > 0 && cursorStart == 0) || displayCursor > 1) { displayCursor--; }
+                else if (cursorStart > 0) { cursorStart--; }
+            }
+            else if (key == KEY_CTRL_RIGHT) {
+                if ((displayCursor < MESSAGE_EDIT_LENGTH && cursorStart == strlen(messageWriting) - MESSAGE_EDIT_LENGTH) || displayCursor < MESSAGE_EDIT_LENGTH - 1) { displayCursor++; }
+                else if (cursorStart < strlen(messageWriting) - MESSAGE_EDIT_LENGTH) { cursorStart++; }
             }
 
             if (key == KEY_CTRL_SHIFT) { if (keyState == 1) { keyState = 0; } else { keyState = 1; }}
