@@ -2,7 +2,10 @@
 Wireless-Comunication-between-Casio-Calculators.code-workspace
 
 Casio Application/Debug/*
+Casio Application/INIT/*
+Casio Application/SDCard/*
 Casio Application/FXSH_Build.bat
+Casio Application/WMCP.dlr
 Casio Application/WMCP.dlw
 Casio Application/WMCP.g1w
 

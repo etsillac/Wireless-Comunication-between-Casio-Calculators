@@ -1,18 +1,47 @@
 #include "fxlib.h"
 #include "sh4Compability.h"
+#include "syscall.h"
+
+/* itoa:  convert n to characters in s */
+void itoa(int n, char s[]) {
+    int i, j, sign;
+    char c;
+
+    if ((sign = n) < 0)  /* record sign */
+        n = -n;          /* make n positive */
+    i = 0;
+    do {       /* generate digits in reverse order */
+         s[i++] = n % 10 + '0';   /* get next digit */
+    } while ((n /= 10) > 0);     /* delete it */
+    if (sign < 0)
+        s[i++] = '-';
+    s[i] = '\0';
+    for (i = 0, j = strlen(s)-1; i<j; i++, j--) {
+        c = s[i];
+        s[i] = s[j];
+        s[j] = c;
+    }
+}
 
 int AddIn_main(int isAppli, unsigned short OptionNum) {
-    unsigned int key;
+    unsigned int i;
+    unsigned int count = 0;
+    char* buffer;
 
-    Bdisp_AllClr_DDVRAM();
+    while (1) {
+        Bdisp_AllClr_VRAM();
 
-    locate(1,4);
-    Print((unsigned char*)"This application is");
-    locate(1,5);
-    Print((unsigned char*)" sample Add-In.");
+        itoa(count, buffer);
+        PrintXY(0, 0, buffer, 0);
 
-    while(1){
-        GetKey(&key);
+        Bdisp_PutDisp_DD();
+
+        i = 100;
+        while (i) {
+            if (IsKeyDown(KEY_CTRL_EXE)) { count++; }
+            i--;
+            Sleep(10);
+        }
     }
 
     return 1;
