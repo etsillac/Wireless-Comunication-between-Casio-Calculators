@@ -3,8 +3,8 @@ Wireless-Comunication-between-Casio-Calculators.code-workspace
 
 Casio Application/Debug
 Casio Application/FXSH_Build.bat
-Casio Application/WCMP.dlw
-Casio Application/WCMP.g1w
+Casio Application/WMCP.dlw
+Casio Application/WMCP.g1w
 
 WMCP - Server Program/.pio
 WMCP - Server Program/.vscode

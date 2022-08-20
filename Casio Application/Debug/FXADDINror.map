@@ -1,8 +1,8 @@
-Hitachi Optimizing Linkage Editor (Ver. 7.1.03.000)19-Aug-2022 21:38:05
+Hitachi Optimizing Linkage Editor (Ver. 7.1.03.000)20-Aug-2022 11:35:38
 
 *** Options ***
 
--subcommand=C:\Users\calli\AppData\Local\Temp\hmk3410.tmp
+-subcommand=C:\Users\calli\AppData\Local\Temp\hmk5CB5.tmp
 noprelink
 sdebug
 rom D=R
@@ -29,17 +29,17 @@ SECTION                            START      END         SIZE   ALIGN
 P_TOP
                                   00300200  0030020b         c   4
 P
-                                  0030020c  003025d7      23cc   4
+                                  0030020c  00300cdf       ad4   4
 C
-                                  003025d8  00303643      106c   4
+                                  00300ce0  00300d27        48   4
 D
-                                  00303644  00303647         4   4
+                                  00300d28  00300d2b         4   4
 B_BR_Size
                                   08100000  08100003         4   4
 B
-                                  08100004  08100017        14   4
+                                  08100004  08100007         4   4
 R
-                                  08100018  0810001b         4   4
+                                  08100008  0810000b         4   4
 
 *** Symbol List ***
 
@@ -55,7 +55,7 @@ FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calcula
 
 SECTION=P
 FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calculators\Casio Application\Debug\WMCP.obj
-                                  0030020c  00301a4b      1840
+                                  0030020c  0030046f       264
   _OSVersionAsInt
                                   0030020c        3e   func ,g         * 
   _delay
@@ -66,366 +66,216 @@ FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calcula
                                   00300348        90   func ,g         * 
   _GetKeyMod
                                   003003d8        3c   func ,g         * 
-  _itoa
-                                  00300414        98   func ,g         * 
-  _drawTitleBar
-                                  003004ac        5c   func ,g         * 
-  _drawPatern
-                                  00300508        82   func ,g         * 
-  _handleKeyboard
-                                  0030058a       57e   func ,g         * 
-  _handleCharacterSelectionMenu
-                                  00300b08       2e6   func ,g         * 
-  _editStringMenu
-                                  00300dee       3f8   func ,g         * 
-  _handleMainMenu
-                                  003011e6       64e   func ,g         * 
   _AddIn_main
-                                  00301834       218   func ,g         * 
-  _initialization$866
-                                  00301856         0   none ,l         * 
+                                  00300414        5c   func ,g         * 
 FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calculators\Casio Application\Debug\syscall.obj
-                                  00301a4c  00301d1b       2d0
+                                  00300470  0030073f       2d0
   _StartAnyApp
-                                  00301a4c         0   none ,g         * 
+                                  00300470         0   none ,g         * 
   _KBD_PutKey
-                                  00301a5c         0   none ,g         * 
+                                  00300480         0   none ,g         * 
   _Register_Addin
-                                  00301a6c         0   none ,g         * 
+                                  00300490         0   none ,g         * 
   _VRam_Base
-                                  00301a7c         0   none ,g         * 
+                                  003004a0         0   none ,g         * 
   _MCS_SearchDirectoryItem
-                                  00301a8c         0   none ,g         * 
+                                  003004b0         0   none ,g         * 
   _MCS_PutInternalItem
-                                  00301a9c         0   none ,g         * 
+                                  003004c0         0   none ,g         * 
   _MCS_DeleteInternalItem
-                                  00301aac         0   none ,g         * 
+                                  003004d0         0   none ,g         * 
   _Cursor_SetPosition
-                                  00301abc         0   none ,g         * 
+                                  003004e0         0   none ,g         * 
   _Cursor_SetFlashStyle
-                                  00301acc         0   none ,g         * 
+                                  003004f0         0   none ,g         * 
   _Cursor_SetFlashMode
-                                  00301adc         0   none ,g         * 
+                                  00300500         0   none ,g         * 
   _Cursor_GetSettings
-                                  00301aec         0   none ,g         * 
+                                  00300510         0   none ,g         * 
   _Cursor_SetFlashOff
-                                  00301afc         0   none ,g         * 
+                                  00300520         0   none ,g         * 
   _App_CONICS
-                                  00301b0c         0   none ,g         * 
+                                  00300530         0   none ,g         * 
   _App_DYNA
-                                  00301b1c         0   none ,g         * 
+                                  00300540         0   none ,g         * 
   _App_EACT
-                                  00301b2c         0   none ,g         * 
+                                  00300550         0   none ,g         * 
   _App_EQUA
-                                  00301b3c         0   none ,g         * 
+                                  00300560         0   none ,g         * 
   _App_PRGM
-                                  00301b4c         0   none ,g         * 
+                                  00300570         0   none ,g         * 
   _App_FINANCE
-                                  00301b5c         0   none ,g         * 
+                                  00300580         0   none ,g         * 
   _App_GRAPH
-                                  00301b6c         0   none ,g         * 
+                                  00300590         0   none ,g         * 
   _App_LINK
-                                  00301b7c         0   none ,g         * 
+                                  003005a0         0   none ,g         * 
   _App_MEMORY
-                                  00301b8c         0   none ,g         * 
+                                  003005b0         0   none ,g         * 
   _App_RECUR
-                                  00301b9c         0   none ,g         * 
+                                  003005c0         0   none ,g         * 
   _App_RUNMAT
-                                  00301bac         0   none ,g         * 
+                                  003005d0         0   none ,g         * 
   _App_STAT
-                                  00301bbc         0   none ,g         * 
+                                  003005e0         0   none ,g         * 
   _App_SYSTEM
-                                  00301bcc         0   none ,g         * 
+                                  003005f0         0   none ,g         * 
   _Serial_ReadByte
-                                  00301bdc         0   none ,g         * 
+                                  00300600         0   none ,g         * 
   _Serial_ReadBytes
-                                  00301bec         0   none ,g         * 
+                                  00300610         0   none ,g         * 
   _Serial_WriteByte
-                                  00301bfc         0   none ,g         * 
+                                  00300620         0   none ,g         * 
   _Serial_WriteBytes
-                                  00301c0c         0   none ,g         * 
+                                  00300630         0   none ,g         * 
   _Serial_WriteByteFIFO
-                                  00301c1c         0   none ,g         * 
+                                  00300640         0   none ,g         * 
   _Serial_GetRxBufferSize
-                                  00301c2c         0   none ,g         * 
+                                  00300650         0   none ,g         * 
   _Serial_GetTxBufferFreeCapacity
-                                  00301c3c         0   none ,g         * 
+                                  00300660         0   none ,g         * 
   _Serial_ClearReceiveBuffer
-                                  00301c4c         0   none ,g         * 
+                                  00300670         0   none ,g         * 
   _Serial_ClearTransmitBuffer
-                                  00301c5c         0   none ,g         * 
+                                  00300680         0   none ,g         * 
   _Serial_Open
-                                  00301c6c         0   none ,g         * 
+                                  00300690         0   none ,g         * 
   _Serial_Close
-                                  00301c7c         0   none ,g         * 
+                                  003006a0         0   none ,g         * 
   _Serial_Peek
-                                  00301c8c         0   none ,g         * 
+                                  003006b0         0   none ,g         * 
   _Serial_IsOpen
-                                  00301c9c         0   none ,g         * 
+                                  003006c0         0   none ,g         * 
   _Setup_GetEntry
-                                  00301cac         0   none ,g         * 
+                                  003006d0         0   none ,g         * 
   _Setup_SetEntry
-                                  00301cbc         0   none ,g         * 
+                                  003006e0         0   none ,g         * 
   _Setup_GetEntryPtr
-                                  00301ccc         0   none ,g         * 
+                                  003006f0         0   none ,g         * 
   _Alpha_GetData
-                                  00301cdc         0   none ,g         * 
+                                  00300700         0   none ,g         * 
   _Alpha_SetData
-                                  00301cec         0   none ,g         * 
+                                  00300710         0   none ,g         * 
   _Alpha_ClearAll
-                                  00301cfc         0   none ,g         * 
+                                  00300720         0   none ,g         * 
   _Keyboard_GetPressedKey
-                                  00301d0c         0   none ,g         * 
+                                  00300730         0   none ,g         * 
 FILE=C:\Users\calli\fx-9860G SDK\OS\FX\lib\setup.obj
-                                  00301d1c  00301e37       11c
+                                  00300740  0030085b       11c
   ___LINK_PROTECT
-                                  00301d1c         4   func ,g         * 
+                                  00300740         4   func ,g         * 
   _SetQuitHandler
-                                  00301d20         6   func ,g         * 
+                                  00300744         6   func ,g         * 
   _OnAppCloseDefault
-                                  00301d26        54   func ,g         * 
+                                  0030074a        54   func ,g         * 
   __INITSCT_ADDIN
-                                  00301d7a        48   func ,g         * 
+                                  0030079e        48   func ,g         * 
   _INIT_ADDIN_APPLICATION
-                                  00301dc2        76   func ,g         * 
+                                  003007e6        76   func ,g         * 
 FILE=__divls
-                                  00301e38  00301eeb        b4
+                                  0030085c  0030090f        b4
   __divls
-                                  00301e38         0   none ,g         * 
+                                  0030085c         0   none ,g         * 
   divls_zero
-                                  00301ed6         0   none ,l         * 
+                                  003008fa         0   none ,l         * 
   A_errno
-                                  00301ee4         0   none ,l         * 
+                                  00300908         0   none ,l         * 
   n_zerono
-                                  00301ee8         0   none ,l         * 
+                                  0030090c         0   none ,l         * 
 FILE=__modls
-                                  00301eec  00301fb3        c8
+                                  00300910  003009d7        c8
   __modls
-                                  00301eec         0   none ,g         * 
+                                  00300910         0   none ,g         * 
   modls_L
-                                  00301f92         0   none ,l         * 
+                                  003009b6         0   none ,l         * 
   modls_zero
-                                  00301f9e         0   none ,l         * 
+                                  003009c2         0   none ,l         * 
   A_errno
-                                  00301fac         0   none ,l         * 
+                                  003009d0         0   none ,l         * 
   n_zerono
-                                  00301fb0         0   none ,l         * 
-FILE=__q_mvn
-                                  00301fb4  00302073        c0
-  __quick_mvn
-                                  00301fb4         0   none ,g         * 
-  FMVN_FAST
-                                  00301fbc         0   none ,l         * 
-  A_FMVN_TBL
-                                  00301fc4         0   none ,l         * 
-  FMVN_64
-                                  00301fca         0   none ,l         * 
-  FMVN_60
-                                  00301fce         0   none ,l         * 
-  FMVN_56
-                                  00301fd2         0   none ,l         * 
-  FMVN_52
-                                  00301fd6         0   none ,l         * 
-  FMVN_48
-                                  00301fda         0   none ,l         * 
-  FMVN_44
-                                  00301fde         0   none ,l         * 
-  FMVN_40
-                                  00301fe2         0   none ,l         * 
-  FMVN_36
-                                  00301fe6         0   none ,l         * 
-  FMVN_32
-                                  00301fea         0   none ,l         * 
-  FMVN_28
-                                  00301fee         0   none ,l         * 
-  FMVN_24
-                                  00301ff2         0   none ,l         * 
-  FMVN_20
-                                  00301ff6         0   none ,l         * 
-  FMVN_16
-                                  00301ffa         0   none ,l         * 
-  FMVN_12
-                                  00301ffe         0   none ,l         * 
-  FMVN_8
-                                  00302002         0   none ,l         * 
-  FMVN_4
-                                  00302006         0   none ,l         * 
-  FMVN_0
-                                  0030200a         0   none ,l         * 
-  FMVN_TBL
-                                  00302010         0   none ,l         * 
-  FMVN_slow
-                                  00302054         0   none ,l         * 
-  FMVN_L
-                                  0030205a         0   none ,l         * 
-  FMVN_END
-                                  0030206e         0   none ,l         * 
-FILE=__s_mvn
-                                  00302074  003020ab        38
-  __slow_mvn
-                                  00302074         0   none ,g         * 
-  SMVN_B
-                                  00302082         0   none ,l         * 
-  SMVN_END
-                                  003020a4         0   none ,l         * 
+                                  003009d4         0   none ,l         * 
 FILE=memcpy
-                                  003020ac  00302169        be
+                                  003009d8  00300a95        be
   _memcpy
-                                  003020ac        be   func ,g         * 
-FILE=memmove
-                                  0030216c  003021af        44
-  _memmove
-                                  0030216c        44   func ,g         * 
-FILE=strlen
-                                  003021b0  003021bf        10
-  _strlen
-                                  003021b0        10   func ,g         * 
-FILE=strncpy
-                                  003021c0  003021ed        2e
-  _strncpy
-                                  003021c0        2e   func ,g         * 
+                                  003009d8        be   func ,g         * 
 FILE=_Bdel_cychdr
-                                  003021f0  003021ff        10
+                                  00300a98  00300aa7        10
   _Bdel_cychdr
-                                  003021f0         0   none ,g         * 
-FILE=_Bdisp_AllClr_VRAM
-                                  00302200  0030220f        10
-  _Bdisp_AllClr_VRAM
-                                  00302200         0   none ,g         * 
-FILE=_Bdisp_PutDisp_DD
-                                  00302210  0030221f        10
-  _Bdisp_PutDisp_DD
-                                  00302210         0   none ,g         * 
-FILE=_Bdisp_PutLineVRAM
-                                  00302220  0030222f        10
-  _Bdisp_DrawLineVRAM
-                                  00302220         0   none ,g         * 
-FILE=_Bdisp_SetPoint_VRAM
-                                  00302230  0030223f        10
-  _Bdisp_SetPoint_VRAM
-                                  00302230         0   none ,g         * 
+                                  00300a98         0   none ,g         * 
+FILE=_Bdisp_AllClr_DDVRAM
+                                  00300aa8  00300ab7        10
+  _Bdisp_AllClr_DDVRAM
+                                  00300aa8         0   none ,g         * 
 FILE=_BfileFLS_CloseFile
-                                  00302240  0030224f        10
+                                  00300ab8  00300ac7        10
   _BfileFLS_CloseFile
-                                  00302240         0   none ,g         * 
+                                  00300ab8         0   none ,g         * 
 FILE=_Bkey_Set_RepeatTime_Default
-                                  00302250  0030225f        10
+                                  00300ac8  00300ad7        10
   _Bkey_Set_RepeatTime_Default
-                                  00302250         0   none ,g         * 
+                                  00300ac8         0   none ,g         * 
 FILE=_CallbackAtQuitMainFunction
-                                  00302260  0030226f        10
+                                  00300ad8  00300ae7        10
   _CallbackAtQuitMainFunction
-                                  00302260         0   none ,g         * 
+                                  00300ad8         0   none ,g         * 
 FILE=_flsFindClose
-                                  00302270  0030227f        10
+                                  00300ae8  00300af7        10
   _flsFindClose
-                                  00302270         0   none ,g         * 
+                                  00300ae8         0   none ,g         * 
 FILE=_getkey
-                                  00302280  0030228f        10
+                                  00300af8  00300b07        10
   _GetKey
-                                  00302280         0   none ,g         * 
+                                  00300af8         0   none ,g         * 
 FILE=_GLibAddinAplExecutionCheck
-                                  00302290  0030229f        10
+                                  00300b08  00300b17        10
   _GLibAddinAplExecutionCheck
-                                  00302290         0   none ,g         * 
+                                  00300b08         0   none ,g         * 
 FILE=_Hmem_SetMMU
-                                  003022a0  003022af        10
+                                  00300b18  00300b27        10
   _Hmem_SetMMU
-                                  003022a0         0   none ,g         * 
-FILE=_malloc
-                                  003022b0  003022bf        10
-  _malloc
-                                  003022b0         0   none ,g         * 
-FILE=_PrintXY
-                                  003022c0  003022cf        10
-  _PrintXY
-                                  003022c0         0   none ,g         * 
-FILE=_RestoreDisp
-                                  003022d0  003022df        10
-  _RestoreDisp
-                                  003022d0         0   none ,g         * 
-FILE=_SaveDisp
-                                  003022e0  003022ef        10
-  _SaveDisp
-                                  003022e0         0   none ,g         * 
+                                  00300b18         0   none ,g         * 
+FILE=_Print
+                                  00300b28  00300b37        10
+  _Print
+                                  00300b28         0   none ,g         * 
 FILE=dispbios
-                                  003022f0  00302465       176
+                                  00300b38  00300cad       176
   _PrintMini
-                                  003022f0        1c   func ,g         * 
+                                  00300b38        1c   func ,g         * 
   _locate
-                                  0030230c        28   func ,g         * 
+                                  00300b54        28   func ,g         * 
   _Bdisp_ReadArea_DD
-                                  00302334       132   func ,g         * 
-FILE=timer
-                                  00302468  00302567       100
-  _GetSDKLibraryVersion
-                                  00302468         6   func ,g         * 
-  _SetTimer
-                                  0030246e        54   func ,g         * 
-  _KillTimer
-                                  003024c2        44   func ,g         * 
-  _Sleep
-                                  00302506        62   func ,g         * 
-FILE=_Bcre_cychdr
-                                  00302568  00302577        10
-  _Bcre_cychdr
-                                  00302568         0   none ,g         * 
-FILE=_BSrl_DummyWAIT
-                                  00302578  00302587        10
-  _BSrl_DummyWAIT
-                                  00302578         0   none ,g         * 
-FILE=_Bsta_cychdr
-                                  00302588  00302597        10
-  _Bsta_cychdr
-                                  00302588         0   none ,g         * 
-FILE=_Bstp_cychdr
-                                  00302598  003025a7        10
-  _Bstp_cychdr
-                                  00302598         0   none ,g         * 
+                                  00300b7c       132   func ,g         * 
 FILE=_DD_GET
-                                  003025a8  003025b7        10
+                                  00300cb0  00300cbf        10
   _DD_GET
-                                  003025a8         0   none ,g         * 
+                                  00300cb0         0   none ,g         * 
 FILE=_locate
-                                  003025b8  003025c7        10
+                                  00300cc0  00300ccf        10
   _locate_OS
-                                  003025b8         0   none ,g         * 
+                                  00300cc0         0   none ,g         * 
 FILE=_PrintMiniSd
-                                  003025c8  003025d7        10
+                                  00300cd0  00300cdf        10
   _PrintMiniSd
-                                  003025c8         0   none ,g         * 
+                                  00300cd0         0   none ,g         * 
 
 SECTION=C
 FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calculators\Casio Application\Debug\WMCP.obj
-                                  003025d8  0030362d      1056
+                                  00300ce0  00300d13        34
   _sc0015
-                                  003025d8        10   data ,g         * 
-  _filledActionButtonBg
-                                  003025e8        85   data ,g         * 
-  _actionButtonBg
-                                  0030266d        85   data ,g         * 
-  _cancelIcon
-                                  003026f2        19   data ,g         * 
-  _confirmIcon
-                                  0030270b        14   data ,g         * 
-  _proceedIcon
-                                  0030271f        23   data ,g         * 
-  _characterSelectionIcon
-                                  00302742        4b   data ,g         * 
-  _uppercaseToLowercaseIcon
-                                  0030278d        4b   data ,g         * 
+                                  00300ce0        10   data ,g         * 
 FILE=addin_sct
-                                  00303630  00303643        14
+                                  00300d14  00300d27        14
   _B_BGN
-                                  00303630         0   none ,g         * 
+                                  00300d14         0   none ,g         * 
   _B_END
-                                  00303634         0   none ,g         * 
+                                  00300d18         0   none ,g         * 
   _R_BGN
-                                  00303638         0   none ,g         * 
+                                  00300d1c         0   none ,g         * 
   _R_END
-                                  0030363c         0   none ,g         * 
+                                  00300d20         0   none ,g         * 
   _D_ROM
-                                  00303640         0   none ,g         * 
+                                  00300d24         0   none ,g         * 
 
 SECTION=B_BR_Size
 FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calculators\Casio Application\Debug\WMCP.obj
@@ -434,28 +284,16 @@ FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calcula
                                   08100000         4   data ,g         * 
 
 SECTION=B
-FILE=C:\Users\calli\Documents\Github\Wireless-Comunication-between-Casio-Calculators\Casio Application\Debug\WMCP.obj
-                                  08100004  08100013        10
-  _key
-                                  08100004         4   data ,g         * 
-  _cooldown
-                                  08100008         4   data ,g         * 
-  _size
-                                  0810000c         2   data ,g         * 
-  _readLength
-                                  0810000e         1   data ,g         * 
-  _readBuffer
-                                  08100010         4   data ,g         * 
 FILE=_errno
-                                  08100014  08100017         4
+                                  08100004  08100007         4
   __errno
-                                  08100014         4   data ,g         * 
+                                  08100004         4   data ,g         * 
 
 SECTION=R
 FILE=C:\Users\calli\fx-9860G SDK\OS\FX\lib\setup.obj
-                                  08100018  0810001b         4
+                                  08100008  0810000b         4
   _gb_OnAppClose
-                                  08100018         4   data ,g         * 
+                                  08100008         4   data ,g         * 
 
 Absolute value symbols
 FILE=__divls
@@ -467,16 +305,7 @@ FILE=__modls
 FILE=_Bdel_cychdr
   __JumpTableTOP
                                   80010070         0   none ,l         * 
-FILE=_Bdisp_AllClr_VRAM
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_Bdisp_PutDisp_DD
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_Bdisp_PutLineVRAM
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_Bdisp_SetPoint_VRAM
+FILE=_Bdisp_AllClr_DDVRAM
   __JumpTableTOP
                                   80010070         0   none ,l         * 
 FILE=_BfileFLS_CloseFile
@@ -500,28 +329,7 @@ FILE=_GLibAddinAplExecutionCheck
 FILE=_Hmem_SetMMU
   __JumpTableTOP
                                   80010070         0   none ,l         * 
-FILE=_malloc
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_PrintXY
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_RestoreDisp
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_SaveDisp
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_Bcre_cychdr
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_BSrl_DummyWAIT
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_Bsta_cychdr
-  __JumpTableTOP
-                                  80010070         0   none ,l         * 
-FILE=_Bstp_cychdr
+FILE=_Print
   __JumpTableTOP
                                   80010070         0   none ,l         * 
 FILE=_DD_GET
