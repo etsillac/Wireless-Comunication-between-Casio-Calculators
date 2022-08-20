@@ -31,6 +31,8 @@ int GetKeyDown(int time, unsigned int* key) {
     while (cooldown && !keyPressed) {
         for (i = 0; i < 80; i++) {
             if (IsKeyDown(i)) {
+                while (IsKeyDown(i)) { Sleep(10); }
+
                 *key = i;
                 keyPressed = 1;
                 break;
@@ -46,22 +48,23 @@ int GetKeyDown(int time, unsigned int* key) {
 
 int AddIn_main(int isAppli, unsigned short OptionNum) {
     unsigned int key;
-    int hasKeyBeenPressed = 0;
+    int count;
 
     char* buffer;
 
     while (1) {
         Bdisp_AllClr_VRAM();
 
-        if (hasKeyBeenPressed) {
-            itoa(key, buffer);
-            PrintXY(0, 0, buffer, 0);
-        }
-        else { PrintXY(0, 0, "No key pressed", 0); }
+        itoa(count, buffer);
+        PrintMini(0, 0, buffer, 0);
 
         Bdisp_PutDisp_DD();
 
-        hasKeyBeenPressed = GetKeyDown(1000, &key);
+        if (GetKeyDown(1000, &key)) {
+            if (key == KEY_CTRL_MENU) { return 1; }
+            else if (key == KEY_CHAR_PLUS) { count++; }
+            else if (key == KEY_CHAR_MINUS) { count--; }
+        }
     }
 
     return 1;
