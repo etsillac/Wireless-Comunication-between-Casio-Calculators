@@ -37,6 +37,8 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
         Bdisp_PutDisp_DD();
 
         if (IsKeyDown(KEY_CTRL_EXE)) { count++; }
+        if (IsKeyDown(KEY_CTRL_DEL)) { count = 0; }
+        if (IsKeyDown(KEY_CTRL_MENU) || IsKeyDown(KEY_CTRL_EXIT)) { break; }
     }
 
     return 1;
