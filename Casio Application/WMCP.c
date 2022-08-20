@@ -36,12 +36,7 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
 
         Bdisp_PutDisp_DD();
 
-        i = 100;
-        while (i) {
-            if (IsKeyDown(KEY_CTRL_EXE)) { count++; }
-            i--;
-            Sleep(10);
-        }
+        if (IsKeyDown(KEY_CTRL_EXE)) { count++; }
     }
 
     return 1;
