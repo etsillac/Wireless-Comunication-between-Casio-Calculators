@@ -1,7 +1,7 @@
 //------------------------------------------------------------------
 // Addin-Application header control file, created with the CASIO SDK
 //------------------------------------------------------------------
-[OUTPUT]     : "WMCP.G1A"
+[OUTPUT]     : "WMCP.g1a"
 [BINDATA]    : "FXADDINror.bin"
 [DISPNAME]   : "WMCP"
 [APPNAME]    : "@WMCP"

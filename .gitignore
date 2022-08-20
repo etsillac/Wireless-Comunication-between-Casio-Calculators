@@ -1,7 +1,7 @@
 .vscode
 Wireless-Comunication-between-Casio-Calculators.code-workspace
 
-Casio Application/Debug
+Casio Application/Debug/*
 Casio Application/FXSH_Build.bat
 Casio Application/WMCP.dlw
 Casio Application/WMCP.g1w
