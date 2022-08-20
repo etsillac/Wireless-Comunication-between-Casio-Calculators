@@ -23,22 +23,45 @@ void itoa(int n, char s[]) {
     }
 }
 
+int GetKeyDown(int time, unsigned int* key) {
+    int i;
+    int keyPressed = 0;
+    int cooldown = time / 50;
+
+    while (cooldown && !keyPressed) {
+        for (i = 0; i < 80; i++) {
+            if (IsKeyDown(i)) {
+                *key = i;
+                keyPressed = 1;
+                break;
+            }
+        }
+
+        cooldown--;
+        Sleep(50);
+    }
+
+    return keyPressed;
+}
+
 int AddIn_main(int isAppli, unsigned short OptionNum) {
-    unsigned int i;
-    unsigned int count = 0;
+    unsigned int key;
+    int hasKeyBeenPressed = 0;
+
     char* buffer;
 
     while (1) {
         Bdisp_AllClr_VRAM();
 
-        itoa(count, buffer);
-        PrintXY(0, 0, buffer, 0);
+        if (hasKeyBeenPressed) {
+            itoa(key, buffer);
+            PrintXY(0, 0, buffer, 0);
+        }
+        else { PrintXY(0, 0, "No key pressed", 0); }
 
         Bdisp_PutDisp_DD();
 
-        if (IsKeyDown(KEY_CTRL_EXE)) { count++; }
-        if (IsKeyDown(KEY_CTRL_DEL)) { count = 0; }
-        if (IsKeyDown(KEY_CTRL_MENU) || IsKeyDown(KEY_CTRL_EXIT)) { break; }
+        hasKeyBeenPressed = GetKeyDown(1000, &key);
     }
 
     return 1;

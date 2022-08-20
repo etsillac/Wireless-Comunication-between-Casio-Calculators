@@ -182,11 +182,40 @@ char Alpha_SetData(char variable, char *src);
 void Alpha_ClearAll(void);
 
 /*************************************************************************/
-/**                   Syscall ajoutes par Calliste                      **/
+/**                   Syscall ajoutes par Etsillac                      **/
 /*************************************************************************/
 
 // If a key is pressed, its matrixcode is put into matrixcode
 // and 1 is returned. If no key is currently pressed, 0 is returned.
 int Keyboard_GetPressedKey(short*matrixcode);
+
+// column receives the column number of the next key in keyboard buffer
+// row receives the row number of the next key in keyboard buffer
+// type_of_waiting can be
+// KEYWAIT_HALTON_TIMEROFF (0) If there are no characters in the key buffer, this function waits until a character arrives and then returns immediately.
+// KEYWAIT_HALTOFF_TIMEROFF (1) this function returns immediately.
+// KEYWAIT_HALTON_TIMERON (2) If no character arrives within the time (seconds) specified by the time parameter, this function times out.
+// timeout_period may be 0..3600 seconds.
+//
+// This function is a 6 parameter call!
+// If menu is zero and type_of_waiting is not KEYWAIT_HALTOFF_TIMEROFF, the function jumps to the main menu, if the MENU-key is hit.
+// If menu is not zero or type_of_waiting is KEYWAIT_HALTOFF_TIMEROFF, the function returns column and row of the MENU-key, if the MENU-key is hit. Hence you have to provide for an exit yourself.
+// In *keycode the function returns a keycode, if previously set by Keyboard_PutKeycode(0x910) or zero, if not.
+//
+// With type_of_waiting == KEYWAIT_HALTOFF_TIMEROFF, the function does not heed for key chatter!
+//
+// The matrixcodes returned start with 0x0101. The most other matrixfunctions return codes starting with 0x0000.
+// columnnumber 7..2 from left to right.
+// rownumber 2..10 from bottom to top
+// Examples:
+// F1: 0x070A
+// EXE: 0x0302
+// exception AC/on: 0x0101
+//
+// returns
+// KEYREP_NOEVENT (0): no key available (only with type_of_waiting is KEYWAIT_HALTOFF_TIMEROFF )
+// KEYREP_KEYEVENT (1): key available
+// KEYREP_TIMEREVENT (2): timeout (only with type_of_waiting is KEYWAIT_HALTON_TIMERON )
+int KeyBoard_GetKeyWait(int *column, int *row, int type_of_waiting, int timeout_period, int menu, unsigned short *keycode);
 
 #endif

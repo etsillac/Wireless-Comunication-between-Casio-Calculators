@@ -60,5 +60,6 @@
 	SYSCALL 04E0,	_Alpha_SetData
 	SYSCALL 04E1,	_Alpha_ClearAll
 
+	SYSCALL 0247,	_KeyBoard_GetKeyWait
 	SYSCALL 024A,	_Keyboard_GetPressedKey
 	.end
