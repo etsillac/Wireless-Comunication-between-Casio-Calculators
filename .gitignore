@@ -1,6 +1,6 @@
-.vscode
 Wireless-Comunication-between-Casio-Calculators.code-workspace
 
+Casio Application/.vscode
 Casio Application/Debug/*
 Casio Application/INIT/*
 Casio Application/SDCard/*

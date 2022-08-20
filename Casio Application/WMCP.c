@@ -284,10 +284,8 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
         }
 
         if (editMode) {
-            strncpy(currentEditMessage, messageWriting + cursorStart, MESSAGE_EDIT_LENGTH+1);
-            currentEditMessage[MESSAGE_EDIT_LENGTH+1] = 0;      // add a final null terminator
+            PrintXY(0, 57, messageWriting+cursorStart, 0);
 
-            PrintXY(0, 57, currentEditMessage, 0);
             if (keyState == 0) { drawPatern(0 + displayCursor * 6, 57, 2, 7, defaultCursorIcon, 0); }
             else if (keyState == 1) { drawPatern(1 + displayCursor * 6, 57, 5, 7, shiftCursorIcon, 0); }
             else if (uppercase) { drawPatern(1 + displayCursor * 6, 57, 5, 7, uppercaseAlphaCursorIcon, 0); }
@@ -308,22 +306,28 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
             else if (key == KEY_CTRL_F1 && !editMode) {  }      // cancel (decide whether it quits the group or it goes back to edit mode)
             else if (key == KEY_CTRL_F4 && !editMode) {  }      // go to bottom
             else if (key == KEY_CTRL_F5 && !editMode) {  }      // go to character selection menu
-            else if (key == KEY_CTRL_F6) {
-                if (editMode) {  }                              // send message
-                else { uppercase = !uppercase; }
-            }
+            else if (key == KEY_CTRL_F6) { if (editMode) { /* Send message */ } else { uppercase = !uppercase; } }
             else if (key == KEY_CTRL_OPTN) { editMode = 0; }
-            else if (key == KEY_CTRL_EXIT) {
-                if (editMode) {  }                              // quit group
-                else { editMode = 1; }
-            }
+            else if (key == KEY_CTRL_EXIT) { if (editMode) { /* Quit group */ } else { editMode = 1; } }
             else if (key == KEY_CTRL_LEFT) {
-                if ((displayCursor > 0 && cursorStart == 0) || displayCursor > 1) { displayCursor--; }
-                else if (cursorStart > 0) { cursorStart--; }
+                if (displayCursor > 1) { displayCursor--; cursor--; }
+                else if (cursorStart > 0) { cursorStart--; cursor--; }
+                else if (displayCursor > 0) { displayCursor--; cursor--; }
             }
             else if (key == KEY_CTRL_RIGHT) {
-                if ((displayCursor < MESSAGE_EDIT_LENGTH && cursorStart == strlen(messageWriting) - MESSAGE_EDIT_LENGTH) || displayCursor < MESSAGE_EDIT_LENGTH - 1) { displayCursor++; }
-                else if (cursorStart < strlen(messageWriting) - MESSAGE_EDIT_LENGTH) { cursorStart++; }
+                if ((displayCursor < MESSAGE_EDIT_LENGTH - 1) && (displayCursor < strlen(messageWriting) - cursorStart)) { displayCursor++; cursor++; }
+                else if (cursorStart < strlen(messageWriting) - MESSAGE_EDIT_LENGTH) { cursorStart++; cursor++; }
+                else if (displayCursor < strlen(messageWriting) - cursorStart) { displayCursor++; cursor++; }
+            }
+            else if (key == KEY_CTRL_DEL && cursor > 0) {
+                if (displayCursor > 1) { displayCursor--; cursor--; }
+                else if (cursorStart > 0) { cursorStart--; cursor--; }
+                else if (displayCursor > 0) { displayCursor--; cursor--; }
+
+                memmove(&messageWriting[cursor], &messageWriting[cursor+1], MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH - cursor);
+            }
+            else if (cursor < MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH) {
+
             }
 
             if (key == KEY_CTRL_SHIFT) { if (keyState == 1) { keyState = 0; } else { keyState = 1; }}
