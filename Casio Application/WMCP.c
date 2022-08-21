@@ -146,7 +146,7 @@ int GetKeyDown(int time, unsigned int* key) {
 
     return keyPressed;
 }
-const char* KeyCodeToChar(unsigned int keyCode, int keyState, int uppercase) {
+char* KeyCodeToChar(unsigned int keyCode, int keyState, int uppercase) {
     if (keyState == 0) {
         if (keyCode == KEY_CHAR_0) { return "0"; }
         if (keyCode == KEY_CHAR_1) { return "1"; }
@@ -261,8 +261,8 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
     int uppercase = 1;
 
     char* buffer;
+    char* charToAdd;
     char messageWriting[MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1] = "Hello world, i'm Etsillac Gabriel";
-    char currentEditMessage[MESSAGE_EDIT_LENGTH + 2];
 
     Message currentDisplayedMessages[MESSAGES_PER_PAGE];
     char userNames[MAX_GROUP_USERS][3] = { "U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8" };
@@ -276,6 +276,10 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
         Bdisp_AllClr_VRAM();
 
         drawTitleBar("Group name", 1);
+
+        // Debug
+        itoa(strlen(messageWriting), buffer);
+        PrintMini(0, 0, buffer, 0);
 
         for (i = 0; i < MESSAGES_PER_PAGE; i++) {
             PrintXY(0, 9+i*8, userNames[currentDisplayedMessages[i].user], 0);
@@ -309,25 +313,33 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
             else if (key == KEY_CTRL_F6) { if (editMode) { /* Send message */ } else { uppercase = !uppercase; } }
             else if (key == KEY_CTRL_OPTN) { editMode = 0; }
             else if (key == KEY_CTRL_EXIT) { if (editMode) { /* Quit group */ } else { editMode = 1; } }
-            else if (key == KEY_CTRL_LEFT) {
-                if (displayCursor > 1) { displayCursor--; cursor--; }
-                else if (cursorStart > 0) { cursorStart--; cursor--; }
-                else if (displayCursor > 0) { displayCursor--; cursor--; }
+            else if (key == KEY_CTRL_LEFT && cursor > 0) {
+                cursor--;
+                if ((displayCursor > 1) || (displayCursor == 1 && !cursorStart)) { displayCursor--; }
+                else { cursorStart--; }
             }
-            else if (key == KEY_CTRL_RIGHT) {
-                if ((displayCursor < MESSAGE_EDIT_LENGTH - 1) && (displayCursor < strlen(messageWriting) - cursorStart)) { displayCursor++; cursor++; }
-                else if (cursorStart < strlen(messageWriting) - MESSAGE_EDIT_LENGTH) { cursorStart++; cursor++; }
-                else if (displayCursor < strlen(messageWriting) - cursorStart) { displayCursor++; cursor++; }
+            else if (key == KEY_CTRL_RIGHT && cursor < (int)strlen(messageWriting)) {
+                cursor++;
+                if ((displayCursor < (int)(MESSAGE_EDIT_LENGTH - 1)) && (displayCursor < (int)(strlen(messageWriting) - cursorStart))) { displayCursor++; }
+                else if (cursorStart < (int)(strlen(messageWriting) - MESSAGE_EDIT_LENGTH)) { cursorStart++;  }
+                else if (displayCursor < (int)(strlen(messageWriting) - cursorStart)) { displayCursor++; }
             }
             else if (key == KEY_CTRL_DEL && cursor > 0) {
-                if (displayCursor > 1) { displayCursor--; cursor--; }
-                else if (cursorStart > 0) { cursorStart--; cursor--; }
-                else if (displayCursor > 0) { displayCursor--; cursor--; }
+                cursor--;
+                if ((displayCursor > 1) || (displayCursor == 1 && !cursorStart)) { displayCursor--; }
+                else { cursorStart--; }
 
                 memmove(&messageWriting[cursor], &messageWriting[cursor+1], MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH - cursor);
             }
-            else if (cursor < MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH) {
+            else if ((cursor <= (int)strlen(messageWriting)) && ((int)strlen(messageWriting) < (int)(MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH))) {
+                charToAdd = KeyCodeToChar(key, keyState, uppercase);
 
+                memmove(&messageWriting[cursor+strlen(charToAdd)], &messageWriting[cursor], strlen(messageWriting) - cursor);
+                memmove(&messageWriting[cursor], &charToAdd[0], strlen(charToAdd));
+
+                if ((displayCursor < (int)(MESSAGE_EDIT_LENGTH - 1)) && (displayCursor < (int)(strlen(messageWriting) - cursorStart))) { displayCursor++; cursor++; }
+                else if (cursorStart < (int)(strlen(messageWriting) - MESSAGE_EDIT_LENGTH)) { cursorStart++; cursor++;  }
+                else if (displayCursor < (int)(strlen(messageWriting) - cursorStart)) { displayCursor++; cursor++; }
             }
 
             if (key == KEY_CTRL_SHIFT) { if (keyState == 1) { keyState = 0; } else { keyState = 1; }}
