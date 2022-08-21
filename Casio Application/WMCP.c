@@ -9,10 +9,8 @@
 #define MESSAGE_EDIT_LENGTH 17
 #define MESSAGES_PER_PAGE 6
 
-#define DrawButton(column, inversed) drawPatern(2+21*column, 57, 19, 7, inversed ? filledActionButtonBg : actionButtonBg, 0)
-
 typedef struct Message {
-    char user;
+    char user[3];
     char message[MAX_MESSAGE_LENGTH + 1];
 } Message;
 
@@ -53,6 +51,11 @@ const unsigned char proceedIcon[] = {
     1, 1, 1, 1, 1, 1, 1,
     1, 0, 0, 0, 0, 1, 0,
     0, 0, 0, 0, 1, 0, 0
+};
+const unsigned char navigateToBottomIcon[] = {
+    1, 0, 0, 0, 1,
+    0, 1, 0, 1, 0,
+    0, 0, 1, 0, 0
 };
 const unsigned char characterSelectionIcon[] = {
     0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0,
@@ -247,6 +250,9 @@ void drawPatern(int x, int y, int width, int height, const unsigned char* data, 
         }
     }
 }
+void drawButton(int column, int inversed) {
+    drawPatern(2+21*column, 57, 19, 7, inversed ? filledActionButtonBg : actionButtonBg, 0);
+}
 
 int AddIn_main(int isAppli, unsigned short OptionNum) {
     unsigned int key;
@@ -266,10 +272,12 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
     char messageWriting[MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1];
 
     Message currentDisplayedMessages[MESSAGES_PER_PAGE];
-    char userNames[MAX_GROUP_USERS][3] = { "U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8" };
 
     for (i = 0; i < MESSAGES_PER_PAGE; i++) {
-        currentDisplayedMessages[i].user = (char)i;
+        itoa(i+1, buffer);
+        strncpy(currentDisplayedMessages[i].user, buffer, 2);
+        currentDisplayedMessages[i].user[2] = 0;
+
         strncpy(currentDisplayedMessages[i].message, "Nullam vitae orci,", 19);
     }
 
@@ -283,7 +291,7 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
         //PrintMini(0, 0, buffer, 0);
 
         for (i = 0; i < MESSAGES_PER_PAGE; i++) {
-            PrintXY(0, 9+i*8, userNames[currentDisplayedMessages[i].user], 0);
+            PrintXY(0, 9+i*8, currentDisplayedMessages[i].user, 0);
             PrintXY(13, 9+i*8, ":", 0);
             PrintXY(19, 9+i*8, currentDisplayedMessages[i].message, 0);
         }
@@ -299,21 +307,27 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
             }
 
             drawBox(106, 56, 127, 63, 0);
-            DrawButton(5, 0);
+            drawButton(5, 0);
             drawPatern(113, 59, 7, 5, proceedIcon, 0);
         } else {
-            DrawButton(0, 1);
+            drawButton(0, 1);
             drawPatern(9, 58, 5, 5, cancelIcon, 1);
+            drawButton(3, 0);
+            drawPatern(72, 60, 5, 3, navigateToBottomIcon, 0);
+            drawButton(4, 1);
+            drawPatern(88, 58, 15, 5, characterSelectionIcon, 1);
+            drawButton(5, 0);
+            drawPatern(109, 59, 15, 5, uppercaseToLowercaseIcon, 0);
         }
 
         Bdisp_PutDisp_DD();
 
         if (GetKeyDown(500, &key)) {
             if (key == KEY_CTRL_MENU) { break; }
-            else if (key == KEY_CTRL_F1 && !editMode) {  }      // cancel (decide whether it quits the group or it goes back to edit mode)
-            else if (key == KEY_CTRL_F4 && !editMode) {  }      // go to bottom
-            else if (key == KEY_CTRL_F5 && !editMode) {  }      // go to character selection menu
-            else if (key == KEY_CTRL_F6) { if (editMode) { /* Send message */ } else { uppercase = !uppercase; } }
+            else if (key == KEY_CTRL_F1 && !editMode) { editMode = 1; }
+            else if (key == KEY_CTRL_F4 && !editMode) { /* Go to bottom */ }
+            else if (key == KEY_CTRL_F5 && !editMode) { /* Go to character selection menu */ editMode = 1; }
+            else if (key == KEY_CTRL_F6) { if (editMode) { /* Send message */ } else { uppercase = !uppercase; editMode = 1; } }
             else if (key == KEY_CTRL_OPTN) { editMode = 0; }
             else if (key == KEY_CTRL_EXIT) { if (editMode) { /* Quit group */ } else { editMode = 1; } }
             else if (key == KEY_CTRL_SHIFT) { if (keyState == 1) { keyState = 0; } else { keyState = 1; }}
