@@ -169,22 +169,22 @@ char* KeyCodeToChar(unsigned int keyCode, int keyState, int uppercase) {
         if (keyCode == KEY_CHAR_LPAR) { return "("; }
         if (keyCode == KEY_CHAR_RPAR) { return ")"; }
         if (keyCode == KEY_CHAR_COMMA) { return ","; }
-        if (keyCode == KEY_CHAR_STORE) { return "\xE6\x91"; }
+        //if (keyCode == KEY_CHAR_STORE) { return "\xE6\x91"; }
         if (keyCode == KEY_CTRL_XTT) { return "X"; }
-        if (keyCode == KEY_CHAR_SQUARE) { return "\xE5\xC2"; }
+        //if (keyCode == KEY_CHAR_SQUARE) { return "\xE5\xC2"; }
         if (keyCode == KEY_CHAR_POW) { return "^"; }
     }
     else if (keyState == 1) {
-        if (keyCode == KEY_CHAR_0) { return "\x7F\x50"; }
+        //if (keyCode == KEY_CHAR_0) { return "\x7F\x50"; }
         if (keyCode == KEY_CHAR_EQUAL) { return "="; }
-        if (keyCode == KEY_CHAR_EXP) { return "\xE6\x4F"; }
+        //if (keyCode == KEY_CHAR_EXP) { return "\xE6\x4F"; }
         if (keyCode == KEY_CHAR_PLUS) { return "["; }
         if (keyCode == KEY_CHAR_MINUS) { return "]"; }
         if (keyCode == KEY_CHAR_MULT) { return "{"; }
         if (keyCode == KEY_CHAR_DIV) { return "}"; }
-        if (keyCode == KEY_CHAR_RPAR) { return "\xE5\xCA"; }
-        if (keyCode == KEY_CHAR_ANGLE) { return "\x7F\x54"; }
-        if (keyCode == KEY_CHAR_LN) { return "\xE6\x65"; }
+        //if (keyCode == KEY_CHAR_RPAR) { return "\xE5\xCA"; }
+        //if (keyCode == KEY_CHAR_ANGLE) { return "\x7F\x54"; }
+        //if (keyCode == KEY_CHAR_LN) { return "\xE6\x65"; }
         if (keyCode == KEY_CHAR_SQUARE) { return "\x86"; }
     }
     else {
@@ -217,10 +217,10 @@ char* KeyCodeToChar(unsigned int keyCode, int keyState, int uppercase) {
         if (keyCode == KEY_CHAR_COS) { if (uppercase) { return "E"; } else { return "e"; } }
         if (keyCode == KEY_CHAR_TAN) { if (uppercase) { return "F"; } else { return "f"; } }
         if (keyCode == KEY_CHAR_SQUARE) { return "\xCD"; }
-        if (keyCode == KEY_CHAR_POW) { return "\xE6\x47"; }
+        //if (keyCode == KEY_CHAR_POW) { return "\xE6\x47"; }
     }
 
-    return "";
+    return NULL;
 }
 
 void drawBox(int x1, int y1, int x2, int y2, int color) {
@@ -259,10 +259,11 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
     int editMode = 1;
     int keyState = 0;           // 0: default; 1: temp shift; 2: temp alpha; 3: perm alpha
     int uppercase = 1;
+    int showCursor = 1;
 
     char* buffer;
     char* charToAdd;
-    char messageWriting[MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1] = "Hello world, i'm Etsillac Gabriel";
+    char messageWriting[MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1];
 
     Message currentDisplayedMessages[MESSAGES_PER_PAGE];
     char userNames[MAX_GROUP_USERS][3] = { "U1", "U2", "U3", "U4", "U5", "U6", "U7", "U8" };
@@ -278,8 +279,8 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
         drawTitleBar("Group name", 1);
 
         // Debug
-        itoa(strlen(messageWriting), buffer);
-        PrintMini(0, 0, buffer, 0);
+        //itoa(key, buffer);
+        //PrintMini(0, 0, buffer, 0);
 
         for (i = 0; i < MESSAGES_PER_PAGE; i++) {
             PrintXY(0, 9+i*8, userNames[currentDisplayedMessages[i].user], 0);
@@ -290,10 +291,12 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
         if (editMode) {
             PrintXY(0, 57, messageWriting+cursorStart, 0);
 
-            if (keyState == 0) { drawPatern(0 + displayCursor * 6, 57, 2, 7, defaultCursorIcon, 0); }
-            else if (keyState == 1) { drawPatern(1 + displayCursor * 6, 57, 5, 7, shiftCursorIcon, 0); }
-            else if (uppercase) { drawPatern(1 + displayCursor * 6, 57, 5, 7, uppercaseAlphaCursorIcon, 0); }
-            else { drawPatern(1 + displayCursor * 6, 57, 5, 7, lowercaseAlphaCursorIcon, 0); }
+            if (showCursor) {
+                if (keyState == 0) { drawPatern(0 + displayCursor * 6, 57, 2, 7, defaultCursorIcon, 0); }
+                else if (keyState == 1) { drawPatern(1 + displayCursor * 6, 57, 5, 7, shiftCursorIcon, 0); }
+                else if (uppercase) { drawPatern(1 + displayCursor * 6, 57, 5, 7, uppercaseAlphaCursorIcon, 0); }
+                else { drawPatern(1 + displayCursor * 6, 57, 5, 7, lowercaseAlphaCursorIcon, 0); }
+            }
 
             drawBox(106, 56, 127, 63, 0);
             DrawButton(5, 0);
@@ -305,7 +308,7 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
 
         Bdisp_PutDisp_DD();
 
-        if (GetKeyDown(1000, &key)) {
+        if (GetKeyDown(500, &key)) {
             if (key == KEY_CTRL_MENU) { break; }
             else if (key == KEY_CTRL_F1 && !editMode) {  }      // cancel (decide whether it quits the group or it goes back to edit mode)
             else if (key == KEY_CTRL_F4 && !editMode) {  }      // go to bottom
@@ -313,6 +316,8 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
             else if (key == KEY_CTRL_F6) { if (editMode) { /* Send message */ } else { uppercase = !uppercase; } }
             else if (key == KEY_CTRL_OPTN) { editMode = 0; }
             else if (key == KEY_CTRL_EXIT) { if (editMode) { /* Quit group */ } else { editMode = 1; } }
+            else if (key == KEY_CTRL_SHIFT) { if (keyState == 1) { keyState = 0; } else { keyState = 1; }}
+            else if (key == KEY_CTRL_ALPHA) { if (keyState == 0) { keyState = 2; } else if (keyState == 1) { keyState = 3; } else { keyState = 0; } }
             else if (key == KEY_CTRL_LEFT && cursor > 0) {
                 cursor--;
                 if ((displayCursor > 1) || (displayCursor == 1 && !cursorStart)) { displayCursor--; }
@@ -334,18 +339,21 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
             else if ((cursor <= (int)strlen(messageWriting)) && ((int)strlen(messageWriting) < (int)(MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH))) {
                 charToAdd = KeyCodeToChar(key, keyState, uppercase);
 
-                memmove(&messageWriting[cursor+strlen(charToAdd)], &messageWriting[cursor], strlen(messageWriting) - cursor);
-                memmove(&messageWriting[cursor], &charToAdd[0], strlen(charToAdd));
+                if (charToAdd != NULL) {
+                    memmove(&messageWriting[cursor+strlen(charToAdd)], &messageWriting[cursor], strlen(messageWriting) - cursor);
+                    memmove(&messageWriting[cursor], &charToAdd[0], strlen(charToAdd));
 
-                if ((displayCursor < (int)(MESSAGE_EDIT_LENGTH - 1)) && (displayCursor < (int)(strlen(messageWriting) - cursorStart))) { displayCursor++; cursor++; }
-                else if (cursorStart < (int)(strlen(messageWriting) - MESSAGE_EDIT_LENGTH)) { cursorStart++; cursor++;  }
-                else if (displayCursor < (int)(strlen(messageWriting) - cursorStart)) { displayCursor++; cursor++; }
+                    if ((displayCursor < (int)(MESSAGE_EDIT_LENGTH - 1)) && (displayCursor < (int)(strlen(messageWriting) - cursorStart))) { displayCursor++; cursor++; }
+                    else if (cursorStart < (int)(strlen(messageWriting) - MESSAGE_EDIT_LENGTH)) { cursorStart++; cursor++;  }
+                    else if (displayCursor < (int)(strlen(messageWriting) - cursorStart)) { displayCursor++; cursor++; }
+
+                    if (keyState != 3) { keyState = 0; }
+                }
             }
 
-            if (key == KEY_CTRL_SHIFT) { if (keyState == 1) { keyState = 0; } else { keyState = 1; }}
-            else if (key == KEY_CTRL_ALPHA) { if (keyState == 0) { keyState = 2; } else if (keyState == 1) { keyState = 3; } else { keyState = 0; } }
-            else if (keyState != 3) { keyState = 0; }
+            showCursor = 1;
         }
+        else { showCursor = !showCursor; }
     }
 
     return 1;

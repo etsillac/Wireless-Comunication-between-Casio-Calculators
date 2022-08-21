@@ -22,6 +22,7 @@
 #define KEY_CHAR_RPAR 45
 #define KEY_CHAR_COMMA 35
 #define KEY_CHAR_STORE 25
+#define KEY_CHAR_ANGLE 76
 #define KEY_CHAR_LOG 66
 #define KEY_CHAR_LN 56
 #define KEY_CHAR_SIN 46
