@@ -460,86 +460,97 @@ int handleGroupChat(int groupIndex) {
     int messageCount = 0;
     int displayedMessageCursor = 0;
 
-    GetCurrentGroupName:
-    strncpy(sendData, "WMCP Casio - get group name of index ", 128);
+    ConnectToCurrentGroup:
+    strncpy(sendData, "WMCP Casio - connect to group of index ", 128);
     itoa(groupIndex, buffer);
     strcat(sendData, buffer);
     error = sendDataPacket(sendData);
     if (error != 0) {
         errorResult = showErrorCode(error+100);
-        if (errorResult == 0) { goto GetCurrentGroupName; }
-        else return -1;
+        if (errorResult == 0) { goto ConnectToCurrentGroup; }
+        else return 0;
     }
 
     error = recieveDataPacket(recieveData, 50, 0);
     if (error != 0) {
         errorResult = showErrorCode(error+200);
-        if (errorResult == 0) { goto GetCurrentGroupName; }
-        else return -1;
+        if (errorResult == 0) { goto ConnectToCurrentGroup; }
+        else return 0;
     }
     strncpy(groupName, recieveData, MAX_GROUP_NAME_LENGTH+1);
 
     GetNumberOfUser:
-    strncpy(sendData, "WMCP Casio - get number of user from group ", 128);
-    itoa(groupIndex, buffer);
-    strcat(sendData, buffer);
+    strncpy(sendData, "WMCP Casio - get number of user", 128);
     error = sendDataPacket(sendData);
     if (error != 0) {
         errorResult = showErrorCode(error+100);
         if (errorResult == 0) { goto GetNumberOfUser; }
-        else return -1;
+        else return 0;
     }
 
-    error = recieveDataPacket(recieveData, 20, 0);
+    error = recieveDataPacket(recieveData, 50, 0);
     if (error != 0) {
         errorResult = showErrorCode(error+200);
         if (errorResult == 0) { goto GetNumberOfUser; }
-        else return -1;
+        else return 0;
     }
 
-    numberOfUser = recieveData[0];
+    if (strcmp(recieveData, "No group connected to") == 0) {
+        errorResult = showErrorCode(301);
+        if (errorResult == 0) { goto ConnectToCurrentGroup; }
+        else return 0;
+    }
+    else numberOfUser = recieveData[0];
     for (i = 0; (i < numberOfUser) && (i < MAX_GROUP_USERS); i++) {
         GetUserName:
         strncpy(sendData, "WMCP Casio - get user name of index ", 128);
         itoa(i, buffer);
         strcat(sendData, buffer);
-        strcat(sendData, " from group ");
-        itoa(groupIndex, buffer);
-        strcat(sendData, buffer);
         error = sendDataPacket(sendData);
         if (error != 0) {
             errorResult = showErrorCode(error+100);
             if (errorResult == 0) { goto GetUserName; }
-            else return -1;
+            else return 0;
         }
 
         error = recieveDataPacket(recieveData, 50, 0);
         if (error != 0) {
             errorResult = showErrorCode(error+200);
             if (errorResult == 0) { goto GetUserName; }
-            else return -1;
+            else return 0;
         }
-
-        strncpy(users[i], recieveData, 3);
+        
+        if (strcmp(recieveData, "No group connected to") == 0) {
+            errorResult = showErrorCode(301);
+            if (errorResult == 0) { goto ConnectToCurrentGroup; }
+            else return 0;
+        }
+        else strncpy(users[i], recieveData, 3);
     }
 
     while (1) {
+        /***
         AskForNewMessage:
         error = sendDataPacket("WMCP Casio - check for new message");
         if (error != 0) {
             errorResult = showErrorCode(error+100);
             if (errorResult == 0) { goto AskForNewMessage; }
-            else return -1;
+            else return 0;
         }
 
-        error = recieveDataPacket(recieveData, 20, 0);
+        error = recieveDataPacket(recieveData, 100, 0);
         if (error != 0) {
             errorResult = showErrorCode(error+200);
             if (errorResult == 0) { goto AskForNewMessage; }
-            else return -1;
+            else return 0;
         }
 
-        if (strncmp(recieveData, "New message: ", 13) == 0) {
+        if (strcmp(recieveData, "No group connected to") == 0) {
+            errorResult = showErrorCode(301);
+            if (errorResult == 0) { goto ConnectToCurrentGroup; }
+            else return 0;
+        }
+        else if (strncmp(recieveData, "New message: ", 13) == 0) {
             messages[messageCount % MAX_LOADED_MESSAGE].userIndex = recieveData[13];
             strncpy(messages[messageCount % MAX_LOADED_MESSAGE].message, recieveData + 17, MESSAGES_PER_PAGE*MAX_MESSAGE_LENGTH);
 
@@ -547,6 +558,7 @@ int handleGroupChat(int groupIndex) {
             if (messageCount >= MAX_LOADED_MESSAGE) messageStartIndex = (messageCount % MAX_LOADED_MESSAGE + 1) % MAX_LOADED_MESSAGE;
             displayedMessageCursor = max(max(messageCount, MAX_LOADED_MESSAGE) - MESSAGES_PER_PAGE, 0);
         }
+        ***/
 
         Bdisp_AllClr_VRAM();
         drawTitleBar(groupName);
@@ -572,7 +584,9 @@ int handleGroupChat(int groupIndex) {
             drawPatern(113, 59, 7, 5, proceedIcon, 0);
         } else {
             drawButton(0, 1);
-            drawPatern(9, 58, 5, 5, cancelIcon, 1);
+            drawPatern(7, 58, 9, 5, quitIcon, 1);
+            drawButton(1, 0);
+            drawPatern(9, 58, 5, 5, cancelIcon, 0);
             drawButton(3, 0);
             drawPatern(72, 60, 5, 3, navigateToBottomIcon, 0);
             drawButton(4, 1);
@@ -585,12 +599,18 @@ int handleGroupChat(int groupIndex) {
 
         if (GetKeyDown(500, &key)) {
             if (key == KEY_CTRL_MENU) return -1;
-            else if (key == KEY_CTRL_F1 && !editMode) editMode = 1;
+            else if (key == KEY_CTRL_F1 && !editMode) { PrintXY(0, 57, "Loading...           ", 0); Bdisp_PutDisp_DD(); return 0; }
+            else if (key == KEY_CTRL_F2 && !editMode) editMode = 1;
             else if (key == KEY_CTRL_F4 && !editMode) { /* Go to bottom */ }
             else if (key == KEY_CTRL_F5 && !editMode) /* Go to character selection menu */ editMode = 1;
-            else if (key == KEY_CTRL_F6) if (editMode) {
-                /* Send message */
-            } else { uppercase = !uppercase; editMode = 1; }
+            else if (key == KEY_CTRL_F6) {
+                if (editMode) { /* Send message */ memset(writeMessage, 0, MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1); }
+                else { uppercase = !uppercase; editMode = 1; }
+            }
+            else if (key == KEY_CTRL_EXE) {
+                if (editMode) { /* Send message */ memset(writeMessage, 0, MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1); }
+                else editMode = 1;
+            }
             else if (key == KEY_CTRL_OPTN) editMode = 0;
             else if (key == KEY_CTRL_EXIT) if (editMode) { PrintXY(0, 57, "Loading...           ", 0); Bdisp_PutDisp_DD(); return 0; } else editMode = 1;
             else if (key == KEY_CTRL_SHIFT) if (keyState == 1) keyState = 0; else keyState = 1;
@@ -798,8 +818,6 @@ int AddIn_main(int isAppli, unsigned short OptionNum) {
     }
 
     while (1) {
-
-
         selectedGroupIndex = handleDiscussionGroupsMenu();
         if (selectedGroupIndex == -1) goto CloseApplication;
 
