@@ -255,7 +255,7 @@ DataPacket makeDataPacket(char* data) {
     return dataPacket;
 }
 int recieveDataPacket(char* dest, int cooldown, int interruptible) {
-    int error, sizeRead;
+    int error = 0, sizeRead;
     DataPacket dataPacket;
 
     while (cooldown && Serial_GetRxBufferSize() < sizeof(DataPacket)) {
@@ -275,7 +275,7 @@ int recieveDataPacket(char* dest, int cooldown, int interruptible) {
     return error;
 }
 int sendDataPacket(char* data) {
-    int error;
+    int error = 0;
     DataPacket dataPacket = makeDataPacket(data);
 
     if (checkDataPacketValid(&dataPacket) == 0) error = Serial_WriteBytes(&dataPacket, sizeof(DataPacket));
@@ -433,6 +433,7 @@ int showErrorCode(int errorCode) {
 int handleGroupChat(int groupIndex) {
     unsigned int key;
     int i;
+    int loopCount;
     int error, errorResult, result;
 
     char sendData[128];
@@ -446,7 +447,7 @@ int handleGroupChat(int groupIndex) {
     int editMode = 1;       // bool
     int keyState = 0;       // 0: default; 1: temp shift; 2: temp alpha; 3: perm alpha
     int uppercase = 1;      // bool
-    int showCursor = 1;     // bool
+    int showCursor = 0;     // bool
 
     char* buffer;
     char charToAdd[3];
@@ -480,8 +481,7 @@ int handleGroupChat(int groupIndex) {
     strncpy(groupName, recieveData, MAX_GROUP_NAME_LENGTH+1);
 
     GetNumberOfUser:
-    strncpy(sendData, "WMCP Casio - get number of user", 128);
-    error = sendDataPacket(sendData);
+    error = sendDataPacket("WMCP Casio - get number of user");
     if (error != 0) {
         errorResult = showErrorCode(error+100);
         if (errorResult == 0) { goto GetNumberOfUser; }
@@ -529,37 +529,38 @@ int handleGroupChat(int groupIndex) {
     }
 
     while (1) {
-        /***
-        AskForNewMessage:
-        error = sendDataPacket("WMCP Casio - check for new message");
-        if (error != 0) {
-            errorResult = showErrorCode(error+100);
-            if (errorResult == 0) { goto AskForNewMessage; }
-            else return 0;
-        }
+        if (loopCount == 0) {
+            error = sendDataPacket("WMCP Casio - test");
+            if (error != 0) {
+                errorResult = showErrorCode(error+100);
+                if (errorResult == 0) { goto SkipAskingForMessages; }
+                else return 0;
+            }
 
-        error = recieveDataPacket(recieveData, 100, 0);
-        if (error != 0) {
-            errorResult = showErrorCode(error+200);
-            if (errorResult == 0) { goto AskForNewMessage; }
-            else return 0;
-        }
+            error = recieveDataPacket(recieveData, 50, 0);
+            if (error != 0) {
+                errorResult = showErrorCode(error+200);
+                if (errorResult == 0) { goto SkipAskingForMessages; }
+                else return 0;
+            }
 
-        if (strcmp(recieveData, "No group connected to") == 0) {
-            errorResult = showErrorCode(301);
-            if (errorResult == 0) { goto ConnectToCurrentGroup; }
-            else return 0;
-        }
-        else if (strncmp(recieveData, "New message: ", 13) == 0) {
-            messages[messageCount % MAX_LOADED_MESSAGE].userIndex = recieveData[13];
-            strncpy(messages[messageCount % MAX_LOADED_MESSAGE].message, recieveData + 17, MESSAGES_PER_PAGE*MAX_MESSAGE_LENGTH);
+            if (strcmp(recieveData, "No group connected to") == 0) {
+                errorResult = showErrorCode(301);
+                if (errorResult == 0) { goto ConnectToCurrentGroup; }
+                else return 0;
+            }
+            else if (strncmp(recieveData, "New message: ", 13) == 0) {
+                messages[messageCount % MAX_LOADED_MESSAGE].userIndex = recieveData[13];
+                strncpy(messages[messageCount % MAX_LOADED_MESSAGE].message, "Test n+0", MESSAGES_PER_PAGE*MAX_MESSAGE_LENGTH);
 
-            messageCount++;
-            if (messageCount >= MAX_LOADED_MESSAGE) messageStartIndex = (messageCount % MAX_LOADED_MESSAGE + 1) % MAX_LOADED_MESSAGE;
-            displayedMessageCursor = max(max(messageCount, MAX_LOADED_MESSAGE) - MESSAGES_PER_PAGE, 0);
+                messageCount++;
+                if (messageCount >= MAX_LOADED_MESSAGE) messageStartIndex = (messageCount % MAX_LOADED_MESSAGE + 1) % MAX_LOADED_MESSAGE;
+                displayedMessageCursor = max(max(messageCount, MAX_LOADED_MESSAGE) - MESSAGES_PER_PAGE, 0);
+            }
         }
-        ***/
+        //loopCount = (loopCount + 1) % 20;
 
+        SkipAskingForMessages:
         Bdisp_AllClr_VRAM();
         drawTitleBar(groupName);
 
@@ -586,7 +587,7 @@ int handleGroupChat(int groupIndex) {
             drawButton(0, 1);
             drawPatern(7, 58, 9, 5, quitIcon, 1);
             drawButton(1, 0);
-            drawPatern(9, 58, 5, 5, cancelIcon, 0);
+            drawPatern(30, 59, 5, 5, cancelIcon, 0);
             drawButton(3, 0);
             drawPatern(72, 60, 5, 3, navigateToBottomIcon, 0);
             drawButton(4, 1);
@@ -595,20 +596,30 @@ int handleGroupChat(int groupIndex) {
             drawPatern(109, 59, 15, 5, uppercaseToLowercaseIcon, 0);
         }
 
+        itoa(key, buffer);
+        PrintXY(0, 30, buffer, 0);
         Bdisp_PutDisp_DD();
 
-        if (GetKeyDown(500, &key)) {
-            if (key == KEY_CTRL_MENU) return -1;
-            else if (key == KEY_CTRL_F1 && !editMode) { PrintXY(0, 57, "Loading...           ", 0); Bdisp_PutDisp_DD(); return 0; }
+        if (GetKeyWait(KEYWAIT_HALTON_TIMERON, 1, 0, &key) == KEYREP_KEYEVENT) {
+            //if (key == KEY_CTRL_MENU) return -1;
+            if (key == KEY_CTRL_F1 && !editMode) { PrintXY(0, 57, "Loading...           ", 0); Bdisp_PutDisp_DD(); return 0; }
             else if (key == KEY_CTRL_F2 && !editMode) editMode = 1;
             else if (key == KEY_CTRL_F4 && !editMode) { /* Go to bottom */ }
             else if (key == KEY_CTRL_F5 && !editMode) /* Go to character selection menu */ editMode = 1;
             else if (key == KEY_CTRL_F6) {
-                if (editMode) { /* Send message */ memset(writeMessage, 0, MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1); }
+                if (editMode) {
+                    /* Send message */
+                    cursor = 0; displayCursor = 0; cursorStart = 0;
+                    memset(writeMessage, 0, MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1);
+                }
                 else { uppercase = !uppercase; editMode = 1; }
             }
             else if (key == KEY_CTRL_EXE) {
-                if (editMode) { /* Send message */ memset(writeMessage, 0, MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1); }
+                if (editMode) {
+                    /* Send message */
+                    cursor = 0; displayCursor = 0; cursorStart = 0;
+                    memset(writeMessage, 0, MESSAGES_PER_PAGE * MAX_MESSAGE_LENGTH + 1);
+                }
                 else editMode = 1;
             }
             else if (key == KEY_CTRL_OPTN) editMode = 0;
@@ -647,10 +658,9 @@ int handleGroupChat(int groupIndex) {
                     if (keyState != 3) keyState = 0;
                 }
             }
-
             showCursor = 1;
         }
-        else { showCursor = !showCursor; }
+        else showCursor = !showCursor;
     }
 }
 int handleDiscussionGroupsMenu() {
