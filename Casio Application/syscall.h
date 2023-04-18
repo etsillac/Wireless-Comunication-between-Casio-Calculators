@@ -218,4 +218,6 @@ int Keyboard_GetPressedKey(short*matrixcode);
 // KEYREP_TIMEREVENT (2): timeout (only with type_of_waiting is KEYWAIT_HALTON_TIMERON )
 int KeyBoard_GetKeyWait(int *column, int *row, int type_of_waiting, int timeout_period, int menu, unsigned short *keycode);
 
+int RTC_GetTicks();
+
 #endif

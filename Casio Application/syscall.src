@@ -62,4 +62,6 @@
 
 	SYSCALL 0247,	_KeyBoard_GetKeyWait
 	SYSCALL 024A,	_Keyboard_GetPressedKey
+
+	SYSCALL 003B,	_RTC_GetTicks
 	.end
